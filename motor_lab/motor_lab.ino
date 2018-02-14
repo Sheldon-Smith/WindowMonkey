@@ -103,7 +103,7 @@ void writeMotor(char motor, int val)
     move_stepper(val);
     return;
   }
-  if (motor == 'r') {
+  if (motor == 'p') {
     motor_PID(val);
     return;
   }
@@ -123,7 +123,7 @@ int previousFlexValue = NULL;
 
 void flex_stepper_control() {
   int flexValue = flex();
-  if (previousFlexValue = NULL) {
+  if (previousFlexValue == NULL) {
     previousFlexValue = flexValue;
     move_stepper(flexValue);
   }
@@ -281,6 +281,7 @@ int motorPos = 0;
 void loop(){
 
   if(read_switch()) {
+    encoderPos = 0;
     if (Serial.available()) {
       char motorSpecifier = Serial.read();
       int motorPos = Serial.parseInt();

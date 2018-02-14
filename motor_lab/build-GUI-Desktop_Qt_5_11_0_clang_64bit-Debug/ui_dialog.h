@@ -36,6 +36,8 @@ public:
     QLabel *label_7;
     QLabel *UltraSound;
     QLabel *FSensor;
+    QLineEdit *DCPosText;
+    QPushButton *setDCPos;
 
     void setupUi(QDialog *Dialog)
     {
@@ -50,7 +52,7 @@ public:
         label_2->setGeometry(QRect(40, 320, 60, 16));
         label_3 = new QLabel(Dialog);
         label_3->setObjectName(QStringLiteral("label_3"));
-        label_3->setGeometry(QRect(20, 370, 101, 16));
+        label_3->setGeometry(QRect(30, 410, 101, 16));
         setRCPos = new QPushButton(Dialog);
         setRCPos->setObjectName(QStringLiteral("setRCPos"));
         setRCPos->setGeometry(QRect(260, 260, 113, 32));
@@ -65,10 +67,10 @@ public:
         setDC->setGeometry(QRect(260, 310, 113, 32));
         StepperText = new QLineEdit(Dialog);
         StepperText->setObjectName(QStringLiteral("StepperText"));
-        StepperText->setGeometry(QRect(120, 360, 113, 31));
+        StepperText->setGeometry(QRect(130, 400, 113, 31));
         setStepper = new QPushButton(Dialog);
         setStepper->setObjectName(QStringLiteral("setStepper"));
-        setStepper->setGeometry(QRect(260, 360, 113, 32));
+        setStepper->setGeometry(QRect(270, 400, 113, 32));
         label_4 = new QLabel(Dialog);
         label_4->setObjectName(QStringLiteral("label_4"));
         label_4->setGeometry(QRect(40, 40, 60, 16));
@@ -87,6 +89,12 @@ public:
         FSensor = new QLabel(Dialog);
         FSensor->setObjectName(QStringLiteral("FSensor"));
         FSensor->setGeometry(QRect(200, 120, 81, 20));
+        DCPosText = new QLineEdit(Dialog);
+        DCPosText->setObjectName(QStringLiteral("DCPosText"));
+        DCPosText->setGeometry(QRect(120, 360, 113, 31));
+        setDCPos = new QPushButton(Dialog);
+        setDCPos->setObjectName(QStringLiteral("setDCPos"));
+        setDCPos->setGeometry(QRect(260, 360, 113, 32));
 
         retranslateUi(Dialog);
 
@@ -111,6 +119,8 @@ public:
         label_7->setText(QApplication::translate("Dialog", "Force Sensitive Sensor:", nullptr));
         UltraSound->setText(QApplication::translate("Dialog", "0", nullptr));
         FSensor->setText(QApplication::translate("Dialog", "0", nullptr));
+        DCPosText->setText(QApplication::translate("Dialog", "0", nullptr));
+        setDCPos->setText(QApplication::translate("Dialog", "setDCPos", nullptr));
     } // retranslateUi
 
 };

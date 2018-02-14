@@ -6,6 +6,10 @@
 
 #include <QTime>
 
+////////////
+#include <QByteArray>
+///
+
 namespace Ui {
 class Dialog;
 }
@@ -30,6 +34,8 @@ private slots:
     //Reading
     void readSerial();
 //    void updateRC(QString);
+
+    void on_setDCPos_clicked();
 
 private:
     Ui::Dialog *ui;

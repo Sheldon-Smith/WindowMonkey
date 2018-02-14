@@ -90,6 +90,13 @@ void Dialog::on_setDC_clicked()
     Dialog::updatePos(QString("d%1").arg(value));
 }
 
+void Dialog::on_setDCPos_clicked()
+{
+    QString input = ui->DCPosText->text();
+    int value = input.toInt();
+    Dialog::updatePos(QString("p%1").arg(value));
+}
+
 void Dialog::on_setStepper_clicked()
 {
     QString input = ui->StepperText->text();
@@ -130,4 +137,6 @@ void Dialog::readSerial()
 //    }
 
 }
+
+
 
