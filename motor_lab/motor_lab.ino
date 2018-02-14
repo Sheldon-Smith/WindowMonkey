@@ -1,3 +1,5 @@
+
+
 #include <A4988.h>
 #include <BasicStepperDriver.h>
 #include <DRV8825.h>
@@ -6,8 +8,8 @@
 #include <MultiDriver.h>
 #include <SyncDriver.h>
 
-int encoderPinA = 2;
-int encoderPinB = 6;
+const int encoderPinA = 2;
+const int encoderPinB = 6;
 volatile unsigned int encoderPos = 0;
 unsigned int lastReportedPos = 1;
 
@@ -51,7 +53,7 @@ int pos = 0;
 ///////////////////
 const int stepPin = 3; 
 const int dirPin = 4; 
-const int motor_steps = 200;
+const int motor_steps = 800;
 A4988 stepper(motor_steps, dirPin, stepPin);
 
 ///////////////////
@@ -95,11 +97,40 @@ void setup(){
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
 }
- 
+
+void writeMotor(char motor, int val)
+{
+  if (motor == 'r'){
+    myservo.write(val);
+    delay(1000);
+    return;
+  }
+  if (motor == 'd'){
+    setDCMotorSpeed(val);
+    return;
+  }
+  if (motor == 's'){
+    stepper.rotate(val);
+    delay(5000);
+    return;
+  }
+    return;
+ }
+
 void loop(){
+  delay(5000);
+  if (Serial.available()) {
+    char motorSpecifier = Serial.read();
+    int motorPos = Serial.parseInt();
+    writeMotor(motorSpecifier, motorPos);
+    }
+   delay(5000);
+
+   
   /////////////////////
   // Servo Motor
   /////////////////////
+  
 //  for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
 //    // in steps of 1 degree
 //    myservo.write(pos);              // tell servo to go to position in variable 'pos'
@@ -115,7 +146,8 @@ void loop(){
 ////  ////////////////////
 //
 //    stepper.rotate(10);
-
+    flex();
+    pot();
     ultrasound();
 }
 
@@ -124,17 +156,22 @@ void flex() {
   int flexValue;
 
   flexValue = analogRead(flexPin);
-
-  Serial.print("Flex: ");
-  Serial.println(flexValue);
+  flexValue = .75*flexValue-620-25;
+// Printing cause problem to GUI control!
+//  Serial.print("Flex: ");
+//  Serial.println(flexValue);
+  stepper.rotate(flexValue);
 }
 void pot() {
 
     int potValue;
     
     potValue = analogRead(potPin);
-    Serial.print("Pot value: ");
-    Serial.println(potValue);
+    potValue = 0.2612*potValue;
+//    Serial.print("Pot: ");
+//    Serial.println(potValue);
+    myservo.write(potValue/4);
+    delay(1000);
 }
 
 
@@ -174,7 +211,26 @@ void ultrasound() {
   digitalWrite(dir11, HIGH);
   digitalWrite(dir12, LOW);
 
-  Serial.print("Distance: ");
-  Serial.println(distance);
+//  Serial.print("Distance: ");
+//  Serial.println(distance);
+}
+
+void setDCMotorSpeed(int motorSpeed) {
+  int motor_speed = 0;
+  if (digitalRead(switchPin)) {
+    motor_speed = motorSpeed;
+  } else {
+    motor_speed = 0;
+  }
+  
+  
+  if (motor_speed > 255) {
+    motor_speed = 255;
+  }
+
+  analogWrite(en1, motor_speed);
+  digitalWrite(dir11, HIGH);
+  digitalWrite(dir12, LOW);
+  delay(5000);
 }
 
