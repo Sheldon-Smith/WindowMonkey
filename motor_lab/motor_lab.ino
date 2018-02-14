@@ -277,11 +277,20 @@ void motor_PID(int targetPos) {
 }
 
 int motorPos = 0;
-
+int prevSwitchState = LOW;
 void loop(){
 
+<<<<<<< HEAD
   if(read_switch()) {
     encoderPos = 0;
+=======
+  int switchState = readSwitch();
+  if(switchState) {
+    if (prevSwitchState != switchState) {
+      encoderPos = 0;
+    }
+    prevSwitchState = switchState;
+>>>>>>> 2e94a403176116eb15179b606e62896d6fad0219
     if (Serial.available()) {
       char motorSpecifier = Serial.read();
       int motorPos = Serial.parseInt();
