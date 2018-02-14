@@ -123,7 +123,7 @@ int previousFlexValue = NULL;
 
 void flex_stepper_control() {
   int flexValue = flex();
-  if (previousFlexValue = NULL) {
+  if (previousFlexValue == NULL) {
     previousFlexValue = flexValue;
     move_stepper(flexValue);
   }
@@ -277,10 +277,15 @@ void motor_PID(int targetPos) {
 }
 
 int motorPos = 0;
-
+int prevSwitchState = LOW;
 void loop(){
 
-  if(read_switch()) {
+  int switchState = readSwitch();
+  if(switchState) {
+    if (prevSwitchState != switchState) {
+      encoderPos = 0;
+    }
+    prevSwitchState = switchState;
     if (Serial.available()) {
       char motorSpecifier = Serial.read();
       int motorPos = Serial.parseInt();
