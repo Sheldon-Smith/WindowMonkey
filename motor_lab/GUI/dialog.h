@@ -31,11 +31,13 @@ private slots:
 
     void on_setStepper_clicked();
 
+    void on_setDCPos_clicked();
+
     //Reading
     void readSerial();
-//    void updateRC(QString);
-
-    void on_setDCPos_clicked();
+    void updatePot(int);
+    void updateUltraSound(int);
+    void updateForceSensor(int);
 
 private:
     Ui::Dialog *ui;
@@ -44,6 +46,13 @@ private:
     static const quint16 arduino_uno_product_id = 67;
     QString arduino_port_name;
     bool arduino_is_available;
+
+    QByteArray serialData;
+    QString serialBuffer;
+    QString parsed_data;
+    int pot_value;
+    int ultrasound_value;
+    int forceSensor_value;
 };
 
 #endif // DIALOG_H

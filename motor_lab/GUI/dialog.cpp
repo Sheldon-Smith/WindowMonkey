@@ -18,6 +18,11 @@ Dialog::Dialog(QWidget *parent) :
     arduino_port_name = "";
     arduino = new QSerialPort;
 
+    serialBuffer = "";
+    pot_value = 0;
+    ultrasound_value = 0;
+    forceSensor_value = 0;
+
 //    qDebug() << "Number of available ports: " << QSerialPortInfo::availablePorts().length();
 //    foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()){
 //            qDebug() << "Has vendor ID: " << serialPortInfo.hasVendorIdentifier();
@@ -101,7 +106,6 @@ void Dialog::on_setStepper_clicked()
 {
     QString input = ui->StepperText->text();
     int value = input.toInt();
-    value = value*100/360;
     Dialog::updatePos(QString("s%1").arg(value));
 }
 
@@ -110,33 +114,41 @@ void Dialog::on_setStepper_clicked()
 void Dialog::readSerial()
 {
 //    qDebug() << "Read Work!";
-//    /*
-//     * readyRead() doesn't guarantee that the entire message will be received all at once.
-//     * The message can arrive split into parts.  Need to buffer the serial data and then parse for the temperature value.
-//     *
-//     */
-//    QStringList buffer_split = serialBuffer.split(","); //  split the serialBuffer string, parsing with ',' as the separator
+    QStringList buffer_split = serialBuffer.split(","); //  split the serialBuffer string, parsing with ',' as the separator
 
-//    //  Check to see if there less than 3 tokens in buffer_split.
-//    //  If there are at least 3 then this means there were 2 commas,
-//    //  means there is a parsed temperature value as the second token (between 2 commas)
-//    if(buffer_split.length() < 3){
-//        // no parsed value yet so continue accumulating bytes from serial in the buffer.
-//        serialData = arduino->readAll();
-//        serialBuffer = serialBuffer + QString::fromStdString(serialData.toStdString());
-//        serialData.clear();
-//    }else{
-//        // the second element of buffer_split is parsed correctly, update the temperature value on temp_lcdNumber
-//        serialBuffer = "";
-//        qDebug() << buffer_split << "\n";
-//        parsed_data = buffer_split[1];
-//        temperature_value = (9/5.0) * (parsed_data.toDouble()) + 32; // convert to fahrenheit
-//        qDebug() << "Temperature: " << temperature_value << "\n";
-//        parsed_data = QString::number(temperature_value, 'g', 4); // format precision of temperature_value to 4 digits or fewer
-//        Dialog::updateTemperature(parsed_data);
-//    }
+    if(buffer_split.length() < 3){
+        serialData = arduino->readAll();
+        serialBuffer = serialBuffer + QString::fromStdString(serialData.toStdString());
+        serialData.clear();
+    }else{
+        serialBuffer = "";
+        qDebug() << buffer_split << "\n";
+        pot_value = buffer_split[0].toInt();
+        ultrasound_value = buffer_split[1].toInt();
+        forceSensor_value = buffer_split[2].toInt();
+
+        Dialog::updatePot(pot_value);
+        Dialog::updateUltraSound(ultrasound_value);
+        Dialog::updateForceSensor(forceSensor_value);
+    }
 
 }
+
+void Dialog::updatePot(int value)
+{
+    ui->PotLabel->setText(QString("<span style=\" font-size:12pt; font-weight:100;\">%1</span>").arg(value));
+}
+
+void Dialog::updateUltraSound(int value)
+{
+    ui->UltraSoundLabel->setText(QString("<span style=\" font-size:12pt; font-weight:100;\">%1</span>").arg(value));
+}
+
+void Dialog::updateForceSensor(int value)
+{
+    ui->ForceSensorLabel->setText(QString("<span style=\" font-size:12pt; font-weight:100;\">%1</span>").arg(value));
+}
+
 
 
 

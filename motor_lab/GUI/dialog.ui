@@ -16,8 +16,8 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>270</y>
+     <x>80</x>
+     <y>260</y>
      <width>60</width>
      <height>16</height>
     </rect>
@@ -29,8 +29,8 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>320</y>
+     <x>80</x>
+     <y>310</y>
      <width>60</width>
      <height>16</height>
     </rect>
@@ -42,8 +42,8 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>410</y>
+     <x>80</x>
+     <y>420</y>
      <width>101</width>
      <height>16</height>
     </rect>
@@ -55,21 +55,24 @@
   <widget class="QPushButton" name="setRCPos">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>260</y>
-     <width>113</width>
-     <height>32</height>
+     <x>330</x>
+     <y>250</y>
+     <width>171</width>
+     <height>41</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">color:rgb(0, 0, 0);</string>
+   </property>
    <property name="text">
-    <string>setRCPos</string>
+    <string>setRCPos(degree)</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="RCText">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>260</y>
+     <x>180</x>
+     <y>250</y>
      <width>113</width>
      <height>31</height>
     </rect>
@@ -81,7 +84,7 @@
   <widget class="QLineEdit" name="DCText">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>180</x>
      <y>310</y>
      <width>113</width>
      <height>31</height>
@@ -94,10 +97,10 @@
   <widget class="QPushButton" name="setDC">
    <property name="geometry">
     <rect>
-     <x>260</x>
+     <x>330</x>
      <y>310</y>
-     <width>113</width>
-     <height>32</height>
+     <width>171</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
@@ -107,8 +110,8 @@
   <widget class="QLineEdit" name="StepperText">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>400</y>
+     <x>180</x>
+     <y>410</y>
      <width>113</width>
      <height>31</height>
     </rect>
@@ -120,20 +123,20 @@
   <widget class="QPushButton" name="setStepper">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>400</y>
-     <width>113</width>
-     <height>32</height>
+     <x>330</x>
+     <y>410</y>
+     <width>171</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>setStepperPos</string>
+    <string>setStepperPos(degree)</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>80</x>
      <y>40</y>
      <width>60</width>
      <height>16</height>
@@ -143,10 +146,10 @@
     <string>Pot:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="Pot">
+  <widget class="QLabel" name="PotLabel">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>120</x>
      <y>40</y>
      <width>60</width>
      <height>16</height>
@@ -159,7 +162,7 @@
   <widget class="QLabel" name="label_6">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>80</x>
      <y>80</y>
      <width>81</width>
      <height>16</height>
@@ -172,7 +175,7 @@
   <widget class="QLabel" name="label_7">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>80</x>
      <y>120</y>
      <width>151</width>
      <height>16</height>
@@ -182,10 +185,10 @@
     <string>Force Sensitive Sensor:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="UltraSound">
+  <widget class="QLabel" name="UltraSoundLabel">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>170</x>
      <y>80</y>
      <width>60</width>
      <height>16</height>
@@ -195,10 +198,10 @@
     <string>0</string>
    </property>
   </widget>
-  <widget class="QLabel" name="FSensor">
+  <widget class="QLabel" name="ForceSensorLabel">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>240</x>
      <y>120</y>
      <width>81</width>
      <height>20</height>
@@ -211,8 +214,8 @@
   <widget class="QLineEdit" name="DCPosText">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>360</y>
+     <x>180</x>
+     <y>350</y>
      <width>113</width>
      <height>31</height>
     </rect>
@@ -224,14 +227,53 @@
   <widget class="QPushButton" name="setDCPos">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>360</y>
-     <width>113</width>
-     <height>32</height>
+     <x>330</x>
+     <y>350</y>
+     <width>171</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>setDCPos</string>
+    <string>setDCPos(degree)</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>40</y>
+     <width>60</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>degree</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_8">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>80</y>
+     <width>60</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>cm</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_9">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>120</y>
+     <width>60</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>%</string>
    </property>
   </widget>
  </widget>
