@@ -7,13 +7,25 @@ Servo myLeftServo;
 // Record the angular position of each motor
 int rightPos = 0;
 int leftPos = 0;
+
+//Linear Servo
+//Left
+const int en1 = 11;
+const int dir11 = 12;
+const int dir12 = 13;
+
+//Right
+const int en2 = 5;
+const int dir21 = 6;
+const int dir22 = 7;
+
 /////////////////////
 // Initial Data
 /////////////////////
 int isInit = 0;
 int pattern = 1;
 int transition = 0;
-float windowWidth = 5, windowHeight = 6;
+float windowWidth = 5.0, windowHeight = 6.0;
 float robotLength = 0.95;
 float cupRadius = 0.125;
 float x = 0.0 + robotLength + cupRadius, y = 0.0 + cupRadius;
@@ -21,22 +33,46 @@ int currMotor = 0;//0 == right, 1 == left
 
 void setup() {
   // put your setup code here, to run once:
-    myRightServo.attach(5);
+    myRightServo.attach(10);
     myLeftServo.attach(9);
+    pinMode(en1, OUTPUT);
+    pinMode(en2, OUTPUT);
     Serial.begin(9600);
 }
 
+void loop() {
+  pullRight();
+  pullLeft();
+//    if (isInit == 0) {
+//      initialize_servos();
+//      isInit = 1;
+//    }
+//    hardCodeMotion();
+//    if (y + robotLength + cupRadius < windowHeight) {
+//        printLocation();
+//    }
+}
+
+//////////////////////
+// Helper Functions
+//////////////////////
+
+//////
+// Servo
+////////////
 void initialize_servos() {
   myRightServo.write(51);
   rightPos = 180;
   myLeftServo.write(48);
   leftPos = 180;
-  delay(10000);
 //  myRightServo.write(10);
 //  rightPos = 0;
 //  myLeftServo.write(5);
 //  leftPos = 0;
 //  delay(10000);
+  pullLeft();
+  pushRight();
+  delay(5000);
 }
 
 void right_turn(int posChange) {
@@ -69,6 +105,36 @@ int leftServoTransFunc(int incomingDegree) {
   return temp;
 }
 
+///////////
+// Linear Actuator
+////////////////////
+
+void pushLeft() {
+    digitalWrite(dir11, LOW);
+    digitalWrite(dir12, HIGH);
+    analogWrite(en1, 255);
+}
+
+void pullLeft() {
+    digitalWrite(dir11, HIGH);
+    digitalWrite(dir12, LOW);
+    analogWrite(en1, 255);
+}
+
+void pushRight() {
+    digitalWrite(dir21, HIGH);
+    digitalWrite(dir22, LOW);
+    analogWrite(en2, 255);
+}
+
+void pullRight() {
+    digitalWrite(dir21, LOW);
+    digitalWrite(dir22, HIGH);
+    analogWrite(en2, 255);
+}
+
+
+
 void printLocation() {
     Serial.print("Current Position: ");
     Serial.print(x);
@@ -81,22 +147,6 @@ void printLocation() {
     Serial.print('\n');
 }
 
-void loop() {
-    if (isInit == 0) {
-      initialize_servos();
-      isInit = 1;
-    }
-  //Testing 
-//    right_turn(-180);
-//    left_turn(-180);
-//    delay(5000);
-//    right_turn(540);
-//    left_turn(540);
-//    delay(10000);// need 10 seconds to turn 540
-    hardCodeMotion();
-    printLocation();
-}
-
 ////////////////
 // Motion 
 ////////////////
@@ -105,12 +155,15 @@ void rotate(int degreeToTurn, int degreeToWrite) {
         right_turn(degreeToTurn);
         left_writePos(degreeToWrite);
         currMotor = 1;
+        Serial.print("Rotate the right motor.\n");
     }
     else if (currMotor == 1) {
         left_turn(degreeToTurn);
         right_writePos(degreeToWrite);
         currMotor = 0;
+        Serial.print("Rotate the left motor.\n");
     }
+    
 }
 void hardCodeMotion() {
     if (y + robotLength + cupRadius >= windowHeight) {
@@ -153,7 +206,8 @@ void hardCodeMotion() {
     }
 
     if (pattern == 2) {
-        if (x - cupRadius - robotLength < 0) {
+        float bias = 0.05;//Fix the problem caused by the accuracy of float type stored in Arduino
+        if (x - cupRadius - robotLength + bias < 0.0) {
             if (transition == 0) {
                 transition = 1;
             }
@@ -165,7 +219,7 @@ void hardCodeMotion() {
                 printLocation();
             }
             if (transition == 2) {
-                rotate(180, 0);
+                rotate(180, 90);
                 switchCup();
                 transition = 3;
                 y += robotLength;
@@ -176,7 +230,7 @@ void hardCodeMotion() {
                 switchCup();
                 transition = 0;
                 pattern = 3;
-                x -= robotLength;
+                x += robotLength;
                 printLocation();
             }
         } else {
@@ -198,12 +252,14 @@ void hardCodeMotion() {
                 switchCup();
                 transition = 2;
                 y += robotLength;
+                printLocation();
             }
             if (transition == 2) {
                 rotate(-180, 540);
                 switchCup();
                 transition = 3;
                 y += robotLength;
+                printLocation();
             }
             if (transition == 3) {
                 rotate(-90, 540);
@@ -211,6 +267,7 @@ void hardCodeMotion() {
                 transition = 0;
                 x -= robotLength;
                 pattern = 2;
+                printLocation();
             }
         } else {
             if (x + cupRadius + 2*robotLength > windowWidth) {
@@ -231,9 +288,24 @@ void hardCodeMotion() {
 void switchCup() {
   if (pattern == 1 && transition == 0) {
     delay(5000);
-  } else {
+  } else if(rightPos == 0 && leftPos == 630) {
+    delay(2500);
+  }
+  else if(pattern == 2 && rightPos == 180 && leftPos == 0) {
+    delay(2500);
+  }
+  else {
     delay(10000);
   }
+  if (currMotor == 0) {
+      pullLeft();
+      pushRight();
+  }
+  else if (currMotor == 1) {
+      pullRight();
+      pushLeft();
+  }
+  delay(5000);
 }
 
 
