@@ -313,9 +313,9 @@ void switchCup() {
   else if (currMotor == 1) {
       pullRight();
       pushLeft();
-      digitalWrite(valveR, LOW);
-      delay(2000);
       digitalWrite(valveL, HIGH);
+      delay(2000);
+      digitalWrite(valveR, LOW);
   }
   delay(5000);
 }
