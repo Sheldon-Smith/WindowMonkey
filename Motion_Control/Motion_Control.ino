@@ -15,9 +15,13 @@ const int dir11 = 12;
 const int dir12 = 13;
 
 //Right
-const int en2 = 5;
-const int dir21 = 6;
-const int dir22 = 7;
+const int en2 = 6;
+const int dir21 = 7;
+const int dir22 = 8;
+
+//Valves
+const int valveR = 5;
+const int valveL = 4;
 
 /////////////////////
 // Initial Data
@@ -37,6 +41,8 @@ void setup() {
     myLeftServo.attach(9);
     pinMode(en1, OUTPUT);
     pinMode(en2, OUTPUT);
+    pinMode(valveR, OUTPUT);
+    pinMode(valveL, OUTPUT);
     Serial.begin(9600);
 }
 
@@ -300,10 +306,16 @@ void switchCup() {
   if (currMotor == 0) {
       pullLeft();
       pushRight();
+      digitalWrite(valveR, HIGH);
+      delay(2000);
+      digitalWrite(valveL, LOW);
   }
   else if (currMotor == 1) {
       pullRight();
       pushLeft();
+      digitalWrite(valveR, LOW);
+      delay(2000);
+      digitalWrite(valveL, HIGH);
   }
   delay(5000);
 }
