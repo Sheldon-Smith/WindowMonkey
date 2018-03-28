@@ -19,11 +19,11 @@ const int en2 = 6;
 const int dir21 = 7;
 const int dir22 = 8;
 
-// Valves
-const int valveL = 5;
-const int valveR = 4;
+//Valves
+const int valveR = 5;
+const int valveL = 4;
 
-///////////////////                                                                                                                                                                                                                                                   //
+/////////////////////
 // Initial Data
 /////////////////////
 int isInit = 0;
@@ -41,22 +41,22 @@ void setup() {
     myLeftServo.attach(9);
     pinMode(en1, OUTPUT);
     pinMode(en2, OUTPUT);
-    pinMode(valveL, OUTPUT);
     pinMode(valveR, OUTPUT);
+    pinMode(valveL, OUTPUT);
     Serial.begin(9600);
 }
 
 void loop() {
-//  pullRight();
-//  pullLeft();
-    if (isInit == 0) {
-      initialize_servos();
-      isInit = 1;
-    }
-    hardCodeMotion();
-    if (y + robotLength + cupRadius < windowHeight) {
-        printLocation();
-    }
+  pullRight();
+  pullLeft();
+//    if (isInit == 0) {
+//      initialize_servos();
+//      isInit = 1;
+//    }
+//    hardCodeMotion();
+//    if (y + robotLength + cupRadius < windowHeight) {
+//        printLocation();
+//    }
 }
 
 //////////////////////
@@ -307,15 +307,14 @@ void switchCup() {
       pullLeft();
       pushRight();
       digitalWrite(valveR, HIGH);
-//      delay(2000);
+      delay(2000);
       digitalWrite(valveL, LOW);
-      
   }
   else if (currMotor == 1) {
       pullRight();
       pushLeft();
       digitalWrite(valveL, HIGH);
-//      delay(2000);
+      delay(2000);
       digitalWrite(valveR, LOW);
   }
   delay(5000);
