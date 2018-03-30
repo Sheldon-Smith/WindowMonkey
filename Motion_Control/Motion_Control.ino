@@ -49,6 +49,8 @@ void setup() {
 void loop() {
 //  pullRight();
 //  pullLeft();
+
+// Main Motion
     if (isInit == 0) {
       initialize_servos();
       isInit = 1;
@@ -78,7 +80,7 @@ void initialize_servos() {
 //  delay(10000);
   pullLeft();
   pushRight();
-  delay(5000);
+  delay(10000);
 }
 
 void right_turn(int posChange) {
@@ -306,17 +308,18 @@ void switchCup() {
   if (currMotor == 0) {
       pullLeft();
       pushRight();
+      // close the right valve and open the left valve
       digitalWrite(valveR, HIGH);
-//      delay(2000);
       digitalWrite(valveL, LOW);
-      
+      delay(6000);
   }
   else if (currMotor == 1) {
       pullRight();
       pushLeft();
-      digitalWrite(valveL, HIGH);
-//      delay(2000);
+      // close the right valve and open the left valve
       digitalWrite(valveR, LOW);
+      digitalWrite(valveL, HIGH);
+      delay(6000);
   }
   delay(5000);
 }
