@@ -59,6 +59,7 @@ void loop() {
     if (y + robotLength + cupRadius < windowHeight) {
         printLocation();
     }
+//    myLeftServo.write(48);
 }
 
 //////////////////////
