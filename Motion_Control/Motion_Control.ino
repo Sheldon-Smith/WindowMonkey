@@ -59,7 +59,23 @@ void loop() {
     if (y + robotLength + cupRadius < windowHeight) {
         printLocation();
     }
+
+// test servos
+//    myRightServo.write(51);
+//    rightPos = 180;
 //    myLeftServo.write(48);
+//    leftPos = 180;
+//    delay(100000);
+//    right_writePos(180);
+//    delay(10000);
+//    right_writePos(0);
+//    delay(10000);
+
+//Test right linear actuator
+//    pushRight();
+//    delay(10000);
+//    pullRight();
+//    delay(10000);
 }
 
 //////////////////////
