@@ -49,7 +49,21 @@ void setup() {
 void loop() {
 //  pullRight();
 //  pullLeft();
-
+//Testing Torque
+//  if (isInit == 0) {
+//    initialize_servos();
+//    isInit = 1;
+//  }
+  // labels for relay might be wrong
+//  left_writePos(180);
+//  delay(5000);
+//  digitalWrite(valveL, HIGH);
+//  digitalWrite(valveR, LOW);
+//  left_turn(360);
+//  delay(16000);
+//  left_turn(-360);
+//  delay(16000);
+    
 // Main Motion
     if (isInit == 0) {
       initialize_servos();
@@ -65,6 +79,10 @@ void loop() {
 //    rightPos = 180;
 //    myLeftServo.write(48);
 //    leftPos = 180;
+//  myRightServo.write(10);
+//  rightPos = 0;
+//  myLeftServo.write(5);
+//  leftPos = 0;
 //    delay(100000);
 //    right_writePos(180);
 //    delay(10000);
@@ -76,6 +94,12 @@ void loop() {
 //    delay(10000);
 //    pullRight();
 //    delay(10000);
+// Serial Control
+  if (Serial.available()) {
+    char part = Serial.read();
+    int val = Serial.parseInt();
+    movePart(part, val);
+  }
 }
 
 //////////////////////
@@ -95,9 +119,23 @@ void initialize_servos() {
 //  myLeftServo.write(5);
 //  leftPos = 0;
 //  delay(10000);
+
   pullLeft();
+//  pushRight();
+  pullRight();
+  digitalWrite(valveR, LOW);
+  digitalWrite(valveL, HIGH);
+  delay(8500);
   pushRight();
-  delay(10000);
+  pushLeft();
+  delay(1500);
+  analogWrite(en1, 0);
+  digitalWrite(dir11, LOW);
+  digitalWrite(dir12, LOW);
+  delay(1500);
+  analogWrite(en2, 0);
+  digitalWrite(dir21, LOW);
+  digitalWrite(dir22, LOW);
 }
 
 void right_turn(int posChange) {
@@ -159,6 +197,17 @@ void pullRight() {
 }
 
 
+void stopLeft() {
+    analogWrite(en2, 0);
+    digitalWrite(dir21, LOW);
+    digitalWrite(dir22, LOW);
+}
+
+void stopRight() {
+    analogWrite(en1, 0);
+    digitalWrite(dir11, LOW);
+    digitalWrite(dir12, LOW);
+}
 
 void printLocation() {
     Serial.print("Current Position: ");
@@ -328,7 +377,20 @@ void switchCup() {
       // close the right valve and open the left valve
       digitalWrite(valveR, HIGH);
       digitalWrite(valveL, LOW);
-      delay(6000);
+      //////////////////////
+      // Move 1.5 s, stop 1.5s and then pull both cups up
+      delay(1500);
+      analogWrite(en1, 0);
+      analogWrite(en2, 0);
+      digitalWrite(dir21, LOW);
+      digitalWrite(dir22, LOW);
+      digitalWrite(dir11, LOW);
+      digitalWrite(dir12, LOW);
+      delay(1500);
+      pullRight();
+      pullLeft();
+      delay(1500);
+      /////////////////////////////////////////////
   }
   else if (currMotor == 1) {
       pullRight();
@@ -336,9 +398,117 @@ void switchCup() {
       // close the right valve and open the left valve
       digitalWrite(valveR, LOW);
       digitalWrite(valveL, HIGH);
-      delay(6000);
+      //////////////////////
+      // Move 1.5 s, stop 1.5s and then pull both cups up
+      delay(1500);
+      analogWrite(en1, 0);
+      analogWrite(en2, 0);
+      digitalWrite(dir21, LOW);
+      digitalWrite(dir22, LOW);
+      digitalWrite(dir11, LOW);
+      digitalWrite(dir12, LOW);
+      delay(1500);
+      pullRight();
+      pullLeft();
+      delay(1500);
+      /////////////////////////////////////////////
+  }
+  delay(0);
+}
+
+void detachRight() {
+  digitalWrite(valveR, HIGH);
+  return;
+}
+
+void detachLeft() {
+  digitalWrite(valveL, HIGH);
+  return;
+}
+void attachRight() {
+  digitalWrite(valveR, LOW);
+  return;
+}
+
+void attachLeft() {
+  digitalWrite(valveL, LOW);
+  return;
+}
+//Serial Control
+void movePart(char part[], int val) {
+  // servos
+  if (part == "SL") {
+    left_writePos(val);
+    delay(5000);
+    return;
+  }
+  if (part == "SR") {
+    right_writePos(val);
+    delay(5000);
+    return;
+  }
+  // linear actuators
+  if (part == "AL") {
+    if (val >= 0) {
+      pushLeft();
+      return;
+    }
+    else {
+      pullLeft();
+      return;
+    }
+  }
+  if (part == "AR") {
+    if (val >= 0) {
+      pushRight();
+      return;
+    }
+    else {
+      pullRight();
+      return;
+    }
+  }
+  // valves
+  if (part == "VL") {
+    if (val >= 0) {
+      detachLeft();
+      return;
+    }
+    else {
+      attachLeft();
+      return;
+    }
+  }
+  if (part == "VR") {
+    if (val >= 0) {
+      detachRight();
+      return;
+    }
+    else {
+      attachRight();
+      return;
+    }
   }
   delay(5000);
 }
 
+//assume a barrier detected and currently left cup is attaching
+void hardCodeCrossBarrier() {
+    pushLeft();
+    pullRight();
+    delay(3000);
+    left_turn(90);
+    delay(3000);
+    pushRight();
+    attachRight();
+    delay(3000);
+    detachLeft();
+    pullLeft();
+    delay(6000);
+    right_turn(90);
+    delay(3000);
+    attachLeft();
+    pushLeft();
+    delay(3000);
+}
 
