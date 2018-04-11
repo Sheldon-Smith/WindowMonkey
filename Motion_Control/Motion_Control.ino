@@ -10,14 +10,18 @@ int leftPos = 0;
 
 //Linear Servo
 //Left
-const int en1 = 11;
-const int dir11 = 12;
-const int dir12 = 13;
+//const int en1 = 11;
+//const int dir11 = 12;
+//const int dir12 = 13;
+const int dir11 = 7;
+const int dir12 = 8;
 
 //Right
 const int en2 = 6;
-const int dir21 = 7;
-const int dir22 = 8;
+//const int dir21 = 7;
+//const int dir22 = 8;
+const int dir21 = 12;
+const int dir22 = 13;
 
 // Valves
 const int valveL = 5;
@@ -39,8 +43,8 @@ void setup() {
   // put your setup code here, to run once:
     myRightServo.attach(10);
     myLeftServo.attach(9);
-    pinMode(en1, OUTPUT);
-    pinMode(en2, OUTPUT);
+//    pinMode(en1, OUTPUT);
+//    pinMode(en2, OUTPUT);
     pinMode(valveL, OUTPUT);
     pinMode(valveR, OUTPUT);
     Serial.begin(9600);
@@ -49,30 +53,73 @@ void setup() {
 void loop() {
 //  pullRight();
 //  pullLeft();
+//  delay(5000);
+//////////////////////////////////////////
 //Testing Torque
 //  if (isInit == 0) {
 //    initialize_servos();
 //    isInit = 1;
 //  }
-  // labels for relay might be wrong
-//  left_writePos(180);
-//  delay(5000);
-//  digitalWrite(valveL, HIGH);
-//  digitalWrite(valveR, LOW);
-//  left_turn(360);
-//  delay(16000);
-//  left_turn(-360);
-//  delay(16000);
+//   labels for relay might be wrong
+  if (isInit == 0) {
+    left_writePos(180);
+    right_writePos(180);
+    pullRight();
+    pullLeft();
+    delay(5000);
+    isInit = 1;
+  }
+
+  pushRight();
+  pullLeft();
+  delay(3000);
+  digitalWrite(valveL, HIGH);
+  digitalWrite(valveR, LOW);
+  delay(2000);
+  right_turn(180);
+  delay(5000);
+  pushLeft();
+  pullRight();
+  delay(3000);
+  digitalWrite(valveL, LOW);
+  digitalWrite(valveR, HIGH);
+  delay(2000);
+  left_turn(180);
+  right_turn(-180);
+  delay(5000);
+  pullLeft();
+  pushRight();
+  delay(3000);
+///
+// try switch
+/////
+// pushLeft();
+// delay(350);
+// pullRight();
+// delay(350);
+// analogWrite(en1, 0);
+// analogWrite(en2, 0);
+// digitalWrite(valveL, LOW);
+// digitalWrite(valveR, HIGH);
+// delay(6000);
+// right_turn(90);
+// delay(3000);
+// right_turn(-90);
+// delay(3000);
+///////////////////////////////////////////
+ 
+
+  
     
 // Main Motion
-    if (isInit == 0) {
-      initialize_servos();
-      isInit = 1;
-    }
-    hardCodeMotion();
-    if (y + robotLength + cupRadius < windowHeight) {
-        printLocation();
-    }
+//    if (isInit == 0) {
+//      initialize_servos();
+//      isInit = 1;
+//    }
+//    hardCodeMotion();
+//    if (y + robotLength + cupRadius < windowHeight) {
+//        printLocation();
+//    }
 
 // test servos
 //    myRightServo.write(51);
@@ -126,14 +173,14 @@ void initialize_servos() {
   digitalWrite(valveR, LOW);
   digitalWrite(valveL, HIGH);
   delay(8500);
-  pushRight();
+//  pushRight();
   pushLeft();
-  delay(1500);
-  analogWrite(en1, 0);
+  delay(350);
+//  analogWrite(en1, 0);
   digitalWrite(dir11, LOW);
   digitalWrite(dir12, LOW);
   delay(1500);
-  analogWrite(en2, 0);
+//  analogWrite(en2, 0);
   digitalWrite(dir21, LOW);
   digitalWrite(dir22, LOW);
 }
@@ -172,25 +219,25 @@ int leftServoTransFunc(int incomingDegree) {
 // Linear Actuator
 ////////////////////
 
-void pushLeft() {
+void pullLeft() {
     digitalWrite(dir11, LOW);
     digitalWrite(dir12, HIGH);
-    analogWrite(en1, 255);
+//    analogWrite(en1, 255);
 }
 
-void pullLeft() {
+void pushLeft() {
     digitalWrite(dir11, HIGH);
     digitalWrite(dir12, LOW);
-    analogWrite(en1, 255);
+//    analogWrite(en1, 255);
 }
 
-void pushRight() {
+void pullRight() {
     digitalWrite(dir21, HIGH);
     digitalWrite(dir22, LOW);
     analogWrite(en2, 255);
 }
 
-void pullRight() {
+void pushRight() {
     digitalWrite(dir21, LOW);
     digitalWrite(dir22, HIGH);
     analogWrite(en2, 255);
@@ -198,13 +245,13 @@ void pullRight() {
 
 
 void stopLeft() {
-    analogWrite(en2, 0);
+//    analogWrite(en2, 0);
     digitalWrite(dir21, LOW);
     digitalWrite(dir22, LOW);
 }
 
 void stopRight() {
-    analogWrite(en1, 0);
+//    analogWrite(en1, 0);
     digitalWrite(dir11, LOW);
     digitalWrite(dir12, LOW);
 }
@@ -380,8 +427,8 @@ void switchCup() {
       //////////////////////
       // Move 1.5 s, stop 1.5s and then pull both cups up
       delay(1500);
-      analogWrite(en1, 0);
-      analogWrite(en2, 0);
+//      analogWrite(en1, 0);
+//      analogWrite(en2, 0);
       digitalWrite(dir21, LOW);
       digitalWrite(dir22, LOW);
       digitalWrite(dir11, LOW);
@@ -401,8 +448,8 @@ void switchCup() {
       //////////////////////
       // Move 1.5 s, stop 1.5s and then pull both cups up
       delay(1500);
-      analogWrite(en1, 0);
-      analogWrite(en2, 0);
+//      analogWrite(en1, 0);
+//      analogWrite(en2, 0);
       digitalWrite(dir21, LOW);
       digitalWrite(dir22, LOW);
       digitalWrite(dir11, LOW);
