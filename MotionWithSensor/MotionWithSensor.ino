@@ -867,6 +867,7 @@ void relocateOnTheRight() {
   delay(8000);
   right_writePos(360);
   delay(8000);
+  currMotor = 1;
 }
 
 void relocateOnTheLeft() {
