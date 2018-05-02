@@ -130,9 +130,23 @@ void setup() {
 void loop() {
       // Main Motion
       if (isInit == 0) {
-//        initialize_servos();
-//        isInit = 1;
+        initialize_servos();
+        isInit = 1;
       }
+      if (isInit == 1) {
+        walkRight();
+        relocateOnTheRight();
+        walkLeft();
+        relocateOnTheLeft();
+        }
+      if (isInit == 2) {
+        relocateOnTheLeft();
+        isInit = 1;
+        }
+      if (isInit == 3) {
+        relocateOnTheRight();
+        isInit = 1;
+        }
 //      hardCodeMotion();
 //      if (y + robotLength + cupRadius < windowHeight) {
 //        printLocation();
@@ -586,16 +600,25 @@ void hardCodeCrossBarrier() {
   pushLeft();
   delay(3000);
 }
-int indexUltrasound = 0; // 0,1 on the same side; 2,3 on the other.
+int indexUltrasound = 0; // 0(left-bottom),1(right-bottom) on the same side; 2(left-top),3(right-top) on the other.
 bool cross(int dist, float deg, int currUltraSound) {
-  if (dist > 0 && dist <= 30 && (deg > 170 || deg < -170)) {
+  if (dist > 0 && dist <= 30 && (deg > 170 || deg < 10)) {
     switch (indexUltrasound)
     {
       case 0:
+        pushRight();
+        pullLeft();
+        delay(3000);
+        attachRight();
+        detachLeft();
+        delay(5000);
+        left_writePos(180);
+        right_turn(180);
+        delay(3000);
         pushLeft();
         pullRight();
         delay(3000);
-        left_turn(180);
+        left_turn(-180);
         delay(3000);
         pushRight();
         attachRight();
@@ -603,7 +626,8 @@ bool cross(int dist, float deg, int currUltraSound) {
         detachLeft();
         pullLeft();
         delay(6000);
-        right_turn(180);
+        right_turn(-180);
+        left_writePos(180);
         delay(3000);
         attachLeft();
         pushLeft();
@@ -787,3 +811,96 @@ bool isWaiting(unsigned long interval) {
   return true;
   }
 
+///////////
+// Relocate 
+//////////////////////////
+void walkRight() {
+  for (int i = 0; i <5; i++) {
+    rotate(360, 0);
+    x += robotLength;
+    switchCup();
+  }
+  right_writePos(180);
+  left_writePos(0);
+  delay(3000);
+  
+}
+
+void walkLeft() {
+  for (int i = 0; i < 5; i++) {
+    rotate(-360, 360);
+    x -= robotLength;
+    switchCup();
+  }
+  left_writePos(180);
+  right_writePos(0);
+  delay(3000);
+}
+//
+void relocateOnTheRight() {
+  while (readIMU() < 0) {
+    // from 180(360)
+    right_writePos(180);
+    left_writePos(540);
+    delay(50);
+  }
+  left_writePos(540);
+  delay(5000);
+  digitalWrite(valveR, HIGH);
+  digitalWrite(valveL, LOW);
+  pullRight();
+  pushLeft();
+  delay(8000);
+  
+
+  y += robotLength;
+  while (readIMU() > 0) {
+    right_writePos(360);
+    left_writePos(0);
+    delay(50);
+    }
+  x = cupRadius + robotLength*2;
+  pushRight();
+  pullLeft();
+  digitalWrite(valveR, LOW);
+  digitalWrite(valveL, HIGH);
+  delay(8000);
+  right_writePos(360);
+  delay(8000);
+}
+
+void relocateOnTheLeft() {
+  while (readIMU() < 0) {
+    // from 180(360)
+    left_writePos(180);
+    right_writePos(0);
+    delay(50);
+  }
+  pushRight();
+  pullLeft();
+  delay(3000);
+  digitalWrite(valveR, LOW);
+  digitalWrite(valveL, HIGH);
+  delay(5000);
+
+  y += robotLength;
+  while (readIMU() < 180) {
+    right_writePos(540);
+    left_writePos(0);
+    delay(50);
+    }
+  x = cupRadius + robotLength*2;
+  pullRight();
+  pushLeft();
+  delay(3000);
+  digitalWrite(valveL, LOW);
+  digitalWrite(valveR, HIGH);
+  delay(5000);
+  right_writePos(0);
+  delay(8000);
+  currMotor = 1;
+}
+
+int readIMU() {
+  return (90 +angle[0] / 10.0);
+  }
