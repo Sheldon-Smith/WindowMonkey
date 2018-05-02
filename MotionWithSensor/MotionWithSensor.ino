@@ -838,12 +838,14 @@ void walkLeft() {
 }
 //
 void relocateOnTheRight() {
-  while (readIMU() < 0) {
+//  while (readIMU() < 0) {
+  for (int i = 0; i < 180; i += 5) {
     // from 180(360)
     right_writePos(180);
     left_writePos(540);
     delay(50);
   }
+//  }
   left_writePos(540);
   delay(5000);
   digitalWrite(valveR, HIGH);
@@ -854,11 +856,13 @@ void relocateOnTheRight() {
   
 
   y += robotLength;
-  while (readIMU() > 0) {
+//  while (readIMU() > 0) {
+  for (int i = 0; i < 360; i+= 5) {
     right_writePos(360);
     left_writePos(0);
     delay(50);
-    }
+  }
+//    }
   x = cupRadius + robotLength*2;
   pushRight();
   pullLeft();
@@ -871,12 +875,14 @@ void relocateOnTheRight() {
 }
 
 void relocateOnTheLeft() {
-  while (readIMU() < 0) {
+//  while (readIMU() < 0) {
     // from 180(360)
+  for (int i = 360; i > 180; i -= 5) {
     left_writePos(180);
     right_writePos(0);
     delay(50);
   }
+//  }
   pushRight();
   pullLeft();
   delay(3000);
@@ -885,11 +891,13 @@ void relocateOnTheLeft() {
   delay(5000);
 
   y += robotLength;
-  while (readIMU() < 180) {
+//  while (readIMU() < 180) {
+  for (int i = 540; i >0 ; i -= 5) {
     right_writePos(540);
     left_writePos(0);
     delay(50);
-    }
+  }
+//    }
   x = cupRadius + robotLength*2;
   pullRight();
   pushLeft();
